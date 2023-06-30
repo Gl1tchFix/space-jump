@@ -113,7 +113,7 @@ function updateGround(delta, speedScale) {
 
 
 const dino = document.querySelector("#dino");
-const JUMP_SPEED = 0.25;
+const JUMP_SPEED = 0.30;
 const GRAVITY = 0.001;
 const DINO_FRAME_COUNT = 4;
 const CACTUS_FRAME_COUNT = 2;
@@ -175,13 +175,23 @@ function handleJump(delta) {
   if (getCustomProperty(dino, "--bottom") <= 0) {
     setCustomProperty(dino, "--bottom", 0);
     isJumping = false;
+    isDoubleJump = false;
   }
 
   yVelocity -= GRAVITY * delta;
 }
 
 function onJump(e) {
-  if (e.code !== "Space" || isJumping) return;
+  if (e.code !== "Space" || isJumping && isDoubleJump)
+  {
+    return;
+  }
+  
+  if (e.code == "Space" && isJumping && !isDoubleJump)
+  {
+    yVelocity = JUMP_SPEED;
+    isDoubleJump = true;
+  }
  
     yVelocity = JUMP_SPEED;
     isJumping = true;
